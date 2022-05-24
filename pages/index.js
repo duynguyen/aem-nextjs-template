@@ -1,8 +1,9 @@
 import Head from 'next/head';
 import Layout from '../components/layout';
-import { ResponsiveGrid, fetchModel } from '@adobe/aem-react-editable-components'
+import { ResponsiveGrid, fetchModel } from '@adobe/aem-react-editable-components';
 
-const { NEXT_PUBLIC_AEM_PATH } = process.env;
+const NEXT_PUBLIC_AEM_PATH = process.env.NEXT_PUBLIC_AEM_PATH;
+const NEXT_PUBLIC_AEM_HOST = process.env.NEXT_PUBLIC_AEM_HOST;
 
 export default function Home({ model }) {
   return (
@@ -24,7 +25,16 @@ export default function Home({ model }) {
 }
 
 export async function getServerSideProps() {
-  const model = await fetchModel({pagePath: NEXT_PUBLIC_AEM_PATH, itemPath: 'root/responsivegrid'});
+  const model = await fetchModel({
+    pagePath: NEXT_PUBLIC_AEM_PATH,
+    itemPath: 'root/responsivegrid',
+    host: NEXT_PUBLIC_AEM_HOST,
+    options: {
+      headers: {
+        Authorization: 'Basic YWRtaW46YWRtaW4='
+      }
+    }
+  });
   return {
     props: {
       model
