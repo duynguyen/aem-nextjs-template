@@ -10,6 +10,24 @@ Page content is retrieved from AEM as page model using Sling JSON Exporter and c
 
 ![editor](editor.png "Editor")
 
+## Table of contents
+
+<!--ts-->
+   * [Getting Started](#getting-started)
+      * [Start the AEM SDK Quickstart](#start-the-aem-sdk-quickstart)
+      * [Download and install WKND Site package](#download-and-install-wknd-site-package)
+      * [Set up AEM Project](#set-up-aem-project)
+      * [Configure the root AEM page](#configure-the-root-aem-page)
+      * [Bootstrap the Next.js App](#bootstrap-the-nextjs-app)
+   * [Local development](#local-development)
+   * [Run in production mode](#run-in-production-mode)
+   * [Run on AEM 6.5](#run-on-aem-65)
+   * [Troubleshooting](#troubleshooting)
+     * [Supported browsers](#supported-browsers)
+     * [Supported Node version](#supported-node-version)
+     * [CORS errors from In-context Editing on a production build](#cors-errors-from-in-context-editing-on-a-production-build)
+<!--te-->
+
 ## Getting Started
 
 ### Start the AEM SDK Quickstart
@@ -144,7 +162,7 @@ Then, execute the below command to run the app in development mode.
 $ npm run dev
 ```
 
-## Running production mode
+## Run in production mode
 
 Make sure you update `.env.production` with your own instances. Then execute the build command.
 
@@ -157,3 +175,49 @@ Once it is built successfully, you can start the production server.
 ```bash
 $ npm run start
 ```
+
+## Run on AEM 6.5
+
+The instructions in [Getting Started](#getting-started) are mainly targeted at AEM Cloud Service. To make this example work with AEM 6.5.12 or newer - use these steps.  
+
+To bootstrap the AEM project - use the archetype as follows:
+
+```bash
+mvn -B org.apache.maven.plugins:maven-archetype-plugin:3.2.1:generate \
+ -D archetypeGroupId=com.adobe.aem \
+ -D archetypeArtifactId=aem-project-archetype \
+ -D archetypeVersion=36\
+ -D aemVersion=6.5.12 \
+ -D appTitle="WKND App" \
+ -D appId="wknd-app" \
+ -D groupId="com.adobe.aem.guides.wkndapp" \
+ -D frontendModule="react"
+```
+
+Install [aem-guides-wknd.all-1.1.0-classic.zip](https://github.com/adobe/aem-guides-wknd/releases/download/aem-guides-wknd-1.1.0/aem-guides-wknd.all-1.1.0-classic.zip) - the `-classic.zip` contains all dependencies needed to make the WKND site work on 6.5. The rest of the steps are the same.  
+
+_(source: https://github.com/duynguyen/aem-nextjs-template/issues/3)_
+
+## Troubleshooting
+
+### Supported browsers
+
+At the current stage, this sample app and in-context editing in AEM work on **Google Chrome**.  
+Testing for **Firefox** and **Safari** is on the way and might need adjustments to be working without errors.  
+
+_(source: https://github.com/duynguyen/aem-nextjs-template/issues/4)_
+
+### Supported Node version
+
+It's recommended to use node version 16.x for now - testing a wider range of node versions is on the way and might need adjustments before they can be used.  
+
+_(source: https://github.com/duynguyen/aem-nextjs-template/issues/5)_
+
+### CORS errors from In-context Editing on a production build
+
+When testing locally by running `npm run dev`, you can load the app at `http://localhost:3000` in AEM Remote Editor without any problem.  
+
+When running `npm run start` for a production build, you might see CORS error because you are opening your Next.js app (e.g. `localhost:3000`) inside AEM (e.g. `localhost:4502`). You can add some Next configs to allow it or use a browser plugin to bypass CORS (development purpose only).
+
+_(source: https://github.com/duynguyen/aem-nextjs-template/issues/6)_
+
